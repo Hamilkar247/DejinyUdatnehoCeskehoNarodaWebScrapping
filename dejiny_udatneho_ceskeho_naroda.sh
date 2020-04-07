@@ -31,9 +31,11 @@ function search_text
     #$0 zwraca nazwe pliku w ktorym sie wykonuje
     #$@ -dolar małpa - zwraca sklejone wszystkie argumenty ( a tak przynajmniej myśle)
     search="side:\"ceskatelevize.cz/ivysilani\" dejiny udatneho ceskeho naroda "$@
-    #echo "search $search" > searchxyz
-    google $search | awk '/www.ceskatelevize\.cz\/ivysilani\//' | awk '{ if($1 ~ 'dalsi-casti') { print $1"/titulky" } else { gsub("dalsi-casti","titulky",$1); print $1;  }  }' > search_result.txt 
-}
+    echo "search $search" > searchxyz
+    google $search | awk '/www.ceskatelevize\.cz\/ivysilani\//' | awk '{ if($1 ~ 'dalsi-casti') { print $1"/titulky" } else { gsub("dalsi-casti","titulky",$1); print $1;  }  }'  > search_result.txt 
+    sed -i 's/dalsi-casti/titulky/' search_result.txt
+
+  }
 
 function download_episode
 {
@@ -66,7 +68,7 @@ search_text ${array_episode[$var_i]}
 
 #for i in "${arrayName[@]}" wnetrze tego ostatecznie do wykonania w petli
 #do
-sed -i 's/dalsi-casti/titulky/' search_result.txt
+
 extraction_subtitles 
 movie_url=$(cat search_result.txt)  #NIGDY NIE PISZ movie_url = $(cat search_result.txt)
 echo "koncowka $movie_url końcówka"
