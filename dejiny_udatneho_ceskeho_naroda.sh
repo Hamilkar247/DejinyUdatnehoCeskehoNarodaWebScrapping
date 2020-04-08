@@ -31,9 +31,12 @@ function search_text
     #$0 zwraca nazwe pliku w ktorym sie wykonuje
     #$@ -dolar małpa - zwraca sklejone wszystkie argumenty ( a tak przynajmniej myśle)
     search="side:\"ceskatelevize.cz/ivysilani\" dejiny udatneho ceskeho naroda "$@
-    echo "search $search" > searchxyz
-    google $search | awk '/www.ceskatelevize\.cz\/ivysilani\//' | awk '{ if($1 ~ 'dalsi-casti') { print $1"/titulky" } else { gsub("dalsi-casti","titulky",$1); print $1;  }  }'  > search_result.txt 
-    sed -i 's/dalsi-casti/titulky/' search_result.txt
+    echo "search \"$search\"" > searchxyz
+    google "$search" | awk '/www.ceskatelevize\.cz\/ivysilani\//' > search_result.txt
+    catecho search_result.txt 1
+    cat search_result.txti |  awk '{ if($1 ~ 'dalsi-casti') { print $1"\/titulky" } else { gsub("dalsi-casti","titulky",$1); print $1;  }  }'  > search_result.txt 
+    catecho  search_result.txt 2
+    #sed -i 's/dalsi-casti/titulky/' search_result.txt
 
   }
 
@@ -51,6 +54,17 @@ function download_episode
    youtube-dl "$1"
    # *.mp4 - rzuca warningiem SC2035, poniższy zapis jest bezpieczniejszy
    rename "s/-[0-9]+.mp4/ Odcinek $2 Napisy polsko-czeskie.mp4/" /*.mp4
+}
+
+function upload_episode_yt
+{
+   if [ -z "$1" ]
+     then
+       echo "nie ma żadnego url! upload sie nie wykona!"
+       exit;
+   fi
+   python exampleGmail.py 
+   nautilus . 
 }
 
 #==================START==================
@@ -93,5 +107,5 @@ extraction_subtitles
 movie_url=$(cat search_result.txt)  #NIGDY NIE PISZ movie_url = $(cat search_result.txt)
 echo "koncowka \"$movie_url\" końcówka"
 download_episode "$movie_url" "$episod"
-python exampleGmail.py
-nautilus .
+upload_episode_yt
+
