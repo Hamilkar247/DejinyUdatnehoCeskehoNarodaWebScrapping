@@ -43,6 +43,16 @@ function download_episode
    rename "s/-[0-9]+.mp4/ Odcinek $2 Napisy polsko-czeskie.mp4/" *
 }
 
+#==================START==================
+echo "witam parametr 1 $1 parametr 1"
+
+if [ -z "$1" ]
+  then
+    echo "nie podano numeru odcinkai!"
+    exit;
+fi
+
+
 #curl zwraca liste odcinków
 #html2text -utf8 - dodane bo inaczej czeskie zznaczki wywala
 #awk 1 - lapie text miedzy dwoma liniami
