@@ -1,11 +1,11 @@
-!/bin/bash
+#!/bin/bash
 
 function extraction_subtitles
 {
    echo "function extraction_subtitles"
    website=$(cat search_result.txt)
    echo "qwert $website"
-   curl $website | html2text | awk '/Dějiny udatného českého národa - /,/Související/' | head -n-1 | tail -n+2 > udatneho_ceskeho_naroda.txt
+   curl $website | html2text | awk '/Dějiny udatného českého národa - /,/Související/' | head "-n-1" | tail "-n+2" > udatneho_ceskeho_naroda.txt
    cat udatneho_ceskeho_naroda.txt
    echo 'wyekstrakowania napisów z strony'
    
@@ -20,7 +20,7 @@ function trim
 {
     #parametr -i zmienia wejsciowe na dane na efekt regexa
     echo "function trim"
-    sed -i 's/^[\t ]*//;s/[\t ]*$//' $1
+    sed -i 's/^[\t ]*//;s/[\t ]*$//' "$1"
 }
 
 function search_text
@@ -38,9 +38,19 @@ function search_text
   }
 
 function download_episode
-{
-   youtube-dl $1
-   rename "s/-[0-9]+.mp4/ Odcinek $2 Napisy polsko-czeskie.mp4/" *
+{  
+   if [ -z "$1" ]
+   then
+     echo "Nie podano https strony";
+     return; 
+   elif [ -z "$2" ]
+   then
+     echo "Nie podano numeru elementu";
+     return;
+   fi
+   youtube-dl "$1"
+   # *.mp4 - rzuca warningiem SC2035, poniższy zapis jest bezpieczniejszy
+   rename "s/-[0-9]+.mp4/ Odcinek $2 Napisy polsko-czeskie.mp4/" /*.mp4
 }
 
 #==================START==================
@@ -74,14 +84,14 @@ echo "rozmiar tablicy ${#array_episode[@]} "
 #echo "${array_episode[@]}"
 episod=$1 #episod=34 gdy petla bedzie działać to za parametr bedzie 
 var_i=$episod-1
-search_text ${array_episode[$var_i]} 
+search_text "${array_episode[$var_i]}"
 
 #for i in "${arrayName[@]}" wnetrze tego ostatecznie do wykonania w petli
 #do
 
 extraction_subtitles 
 movie_url=$(cat search_result.txt)  #NIGDY NIE PISZ movie_url = $(cat search_result.txt)
-echo "koncowka $movie_url końcówka"
-download_episode $movie_url $episod
+echo "koncowka \"$movie_url\" końcówka"
+download_episode "$movie_url" "$episod"
 python exampleGmail.py
 nautilus .
