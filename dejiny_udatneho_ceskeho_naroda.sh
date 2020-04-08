@@ -29,10 +29,11 @@ function search_text
     #gdy przekazywany do funkcji jest string z znakami białymi
     #to $1 zwraca pierwszy wyraz tego stringa , $2 drugi itd
     #$0 zwraca nazwe pliku w ktorym sie wykonuje
-    #$@ -dolar małpa - zwraca sklejone wszystkie argumenty ( a tak przynajmniej myśle)
-    search="side:\"ceskatelevize.cz/ivysilani\" dejiny udatneho ceskeho naroda "$@
+    #$@ -dolar małpa - zwraca argumenty jako tablice
+    #$* zwraca zkonkatenowne wszystkie argumenty
+    search='side:"ceskatelevize.cz/ivysilani/"'" dejiny udatneho ceskeho naroda ""$*"
     echo "search \"$search\"" > searchxyz
-    google "$search" | awk '/www.ceskatelevize\.cz\/ivysilani\//' > search_result.txt
+    google "$search" | awk '/www.ceskatelevize.cz\/ivysilani\//' > search_result.txt
     catecho search_result.txt 1
     cat search_result.txti |  awk '{ if($1 ~ 'dalsi-casti') { print $1"\/titulky" } else { gsub("dalsi-casti","titulky",$1); print $1;  }  }'  > search_result.txt 
     catecho  search_result.txt 2
