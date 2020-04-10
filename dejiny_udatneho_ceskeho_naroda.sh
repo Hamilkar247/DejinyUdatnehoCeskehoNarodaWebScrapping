@@ -3,7 +3,7 @@
 function extraction_subtitles
 {
    echo "function extraction_subtitles"
-   website=$(cat search_result.txt)
+   website=$(cat sprawdzone.txt~)
    echo "qwert $website"
    curl $website | html2text | awk '/Dějiny udatného českého národa - /,/Související/' | head "-n-1" | tail "-n+2" > udatneho_ceskeho_naroda.txt
    cat udatneho_ceskeho_naroda.txt
@@ -32,13 +32,10 @@ function search_text
     #$@ -dolar małpa - zwraca argumenty jako tablice
     #$* zwraca zkonkatenowne wszystkie argumenty
     search='side:"ceskatelevize.cz/ivysilani/"'" dejiny udatneho ceskeho naroda ""$*"
-    echo "search \"$search\"" > searchxyz
-    google "$search" | awk '/www.ceskatelevize.cz\/ivysilani\//' > search_result.txt
-    catecho search_result.txt 1
-    cat search_result.txti |  awk '{ if($1 ~ 'dalsi-casti') { print $1"\/titulky" } else { gsub("dalsi-casti","titulky",$1); print $1;  }  }'  > search_result.txt 
-    catecho  search_result.txt 2
-    #sed -i 's/dalsi-casti/titulky/' search_result.txt
-
+    echo $search > searchxyz~
+    echo $search
+    google --rua "$search" | sed 's/dalsi-casti/titulky/' > result_search.txt~
+    awk -f command_search.awk result_search.txt~ > sprawdzone.txt~ 
   }
 
 function download_episode
@@ -54,7 +51,7 @@ function download_episode
    fi
    youtube-dl "$1"
    # *.mp4 - rzuca warningiem SC2035, poniższy zapis jest bezpieczniejszy
-   rename "s/-[0-9]+.mp4/ Odcinek $2 Napisy polsko-czeskie.mp4/" /*.mp4
+   rename "s/[0-9]+.mp4/ Odcinek $2 Napisy polsko-czeskie.mp4/" *.mp4
 }
 
 function upload_episode_yt
@@ -105,8 +102,8 @@ search_text "${array_episode[$var_i]}"
 #do
 
 extraction_subtitles 
-movie_url=$(cat search_result.txt)  #NIGDY NIE PISZ movie_url = $(cat search_result.txt)
+movie_url=$(cat sprawdzone.txt~)  #NIGDY NIE PISZ movie_url = $(cat search_result.txt)
 echo "koncowka \"$movie_url\" końcówka"
 download_episode "$movie_url" "$episod"
-upload_episode_yt
+upload_episode_yt "$movie_url"
 
