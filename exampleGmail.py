@@ -1,6 +1,6 @@
 from selenium import webdriver
 from time import sleep
-
+import os
 #https://www.youtube.com/watch?v=HkgDRRWrZKg
 class Google:
     
@@ -27,7 +27,10 @@ class Google:
         #self.driver.find_element_by_xpath('//*[@id="select-files-button"]').send_keys("~/Projects/autoWebScrapping/'Dějiny udatného českého národa - Baroko 67.mp4'")
         #self.driver.find_element_by_xpath('//*[@id="select-files-button"]').send_keys("~/Projects/autoWebScrapping/'Dějiny udatného českého národa - Baroko 67.mp4'")
 
-
+#geckodriver - wymagany do odpalenia selenium w przeglądarce na potrzeby skryptu
+geckodriver_path = os.path.dirname(os.path.realpath(__file__))
+print("Scieszka geckodriver:"+geckodriver_path)
+os.environ["PATH"] += os.pathsep + geckodriver_path
 password="bomilkar96"
 username="adonnibal96"
 mylike=Google(username,password)
