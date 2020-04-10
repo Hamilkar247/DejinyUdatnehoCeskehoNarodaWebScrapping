@@ -28,9 +28,13 @@ class Google:
         #self.driver.find_element_by_xpath('//*[@id="select-files-button"]').send_keys("~/Projects/autoWebScrapping/'Dějiny udatného českého národa - Baroko 67.mp4'")
 
 #geckodriver - wymagany do odpalenia selenium w przeglądarce na potrzeby skryptu
-geckodriver_path = os.path.dirname(os.path.realpath(__file__))
-print("Scieszka geckodriver:"+geckodriver_path)
-os.environ["PATH"] += os.pathsep + geckodriver_path
-password="bomilkar96"
-username="adonnibal96"
+path_to_dir = os.path.dirname(os.path.realpath(__file__))
+print("Scieszka do folderu:"+path_to_dir)
+os.environ["PATH"] += os.pathsep + path_to_dir
+file_pass = "gmailPass.txt"
+file = open(path_to_dir+"/"+file_pass,'r')
+dane = file.read().split('\n')
+file.close()
+username = dane[0]
+password = dane[1]
 mylike=Google(username,password)
