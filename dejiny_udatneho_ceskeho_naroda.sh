@@ -32,10 +32,11 @@ function search_text
     #$@ -dolar małpa - zwraca argumenty jako tablice
     #$* zwraca zkonkatenowne wszystkie argumenty
     search='side:"ceskatelevize.cz/ivysilani/"'" dejiny udatneho ceskeho naroda ""$*"
-    echo $search > searchxyz~
+    echo $search > searchxyz~ 
+    #@up sed ma na celu podmian podkreslen na spacje - bez tego wyszukiwanie bylo falszywe
     echo $search
-    google --rua "$search" | sed 's/dalsi-casti/titulky/' > result_search.txt~
-    awk -f command_search.awk result_search.txt~ > sprawdzone.txt~ 
+    google --rua "$search" | sed 's/_/ /' | sed 's/dalsi-casti/titulky/' > result_search.txt~
+    awk -f command_search.awk result_search.txt~ > sprawdzone.txt~    
   }
 
 function download_episode
@@ -79,8 +80,8 @@ fi
 #html2text -utf8 - dodane bo inaczej czeskie zznaczki wywala
 #awk 1 - lapie text miedzy dwoma liniami
 #awk 2 - zwraca linie tam gdzie jest cyfra
-#trim - zdefiniowana metoda sed 's/^[\t ]*//;s/[\t ]*$//' $1
-curl https://cs.wikipedia.org/wiki/Seznam_d%C3%ADl%C5%AF_po%C5%99adu_D%C4%9Bjiny_udatn%C3%A9ho_%C4%8Desk%C3%A9ho_n%C3%A1roda | html2text -utf8 | awk '/1. Lovci_mamutů/,/111. Přípitek na závěr/' | awk '/[0-9]/' > lista_odcinkow.txt
+#trim - zdefiniowana metoda sed 's/^[\t ]*//lshttps://web.archive.org/web/20140412090608/http://www.hermit.org/Linux/ComposeKeys.html/[\t ]*$//' $1
+curl https://cs.wikipedia.org/wiki/Seznam_d%C3%ADl%C5%AF_po%C5%99adu_D%C4%9Bjiny_udatn%C3%A9ho_%C4%8Desk%C3%A9ho_n%C3%A1roda | html2text -utf8 | awk '/1. Lovci_mamutů/,/111. Přípitek na závěr/' | awk '/[0-9]/' | sed 's/_/ /'  > lista_odcinkow.txt
 trim lista_odcinkow.txt
 cat lista_odcinkow.txt
 
