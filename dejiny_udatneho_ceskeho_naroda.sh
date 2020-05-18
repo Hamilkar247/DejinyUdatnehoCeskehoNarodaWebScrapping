@@ -62,6 +62,7 @@ function upload_episode_yt
        echo "nie ma żadnego url! upload sie nie wykona!"
        exit;
    fi
+   src_venv #uruchamiam selenium
    python exampleGmail.py 
    nautilus . 
 }
