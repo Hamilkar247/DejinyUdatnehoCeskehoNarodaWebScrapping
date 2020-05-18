@@ -76,7 +76,7 @@ if [ -z "$1" ]
     exit;
 fi
 
-
+./cleanTempFile.sh
 #curl zwraca liste odcinków
 #html2text -utf8 - dodane bo inaczej czeskie zznaczki wywala
 #awk 1 - lapie text miedzy dwoma liniami
