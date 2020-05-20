@@ -34,8 +34,8 @@ function search_text
     search='side:"ceskatelevize.cz/ivysilani/"'" dejiny udatneho ceskeho naroda ""$*"
     echo "$search" > searchxyz~ 
     #@up sed ma na celu podmian podkreslen na spacje - bez tego wyszukiwanie bylo falszywe
-    echo $search
-    google --rua "$search" | sed 's/_/ /' | sed 's/dalsi-casti/titulky/' > result_search.txt~
+    echo "$search"
+    google --rua "$search" | sed 's/_/ /' | sed 's/bonusy/titulky/' | sed 's/dalsi-casti/titulky/' > result_search.txt~
     awk -f command_search.awk result_search.txt~ > sprawdzone.txt~    
   }
 
