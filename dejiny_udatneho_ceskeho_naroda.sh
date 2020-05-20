@@ -32,7 +32,7 @@ function search_text
     #$@ -dolar małpa - zwraca argumenty jako tablice
     #$* zwraca zkonkatenowne wszystkie argumenty
     search='side:"ceskatelevize.cz/ivysilani/"'" dejiny udatneho ceskeho naroda ""$*"
-    echo $search > searchxyz~ 
+    echo "$search" > searchxyz~ 
     #@up sed ma na celu podmian podkreslen na spacje - bez tego wyszukiwanie bylo falszywe
     echo $search
     google --rua "$search" | sed 's/_/ /' | sed 's/dalsi-casti/titulky/' > result_search.txt~
@@ -43,11 +43,11 @@ function download_episode
 {  
    if [ -z "$1" ]
    then
-     echo "Nie podano https strony";
+     echo "download_episode : Nie podano https strony";
      return; 
    elif [ -z "$2" ]
    then
-     echo "Nie podano numeru elementu";
+     echo "download_episode : Nie podano numeru elementu";
      return;
    fi
    youtube-dl "$1"
@@ -59,10 +59,10 @@ function upload_episode_yt
 {
    if [ -z "$1" ]
      then
-       echo "nie ma żadnego url! upload sie nie wykona!"
+       echo "upload_episode_yt : nie ma żadnego url! upload sie nie wykona!"
        exit;
    fi
-   src_venv #uruchamiam selenium
+#   src_venv #uruchamiam selenium
    python exampleGmail.py 
    nautilus . 
 }
