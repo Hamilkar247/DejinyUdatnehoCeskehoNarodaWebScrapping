@@ -63,7 +63,7 @@ function upload_episode_yt
        exit;
    fi
 #   src_venv #uruchamiam selenium
-   python exampleGmail.py 
+   venv/bin/python exampleGmail.py 
    nautilus . 
 }
 
