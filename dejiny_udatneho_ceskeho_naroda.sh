@@ -1,5 +1,8 @@
 #!/bin/bash
 
+search_url=""
+
+
 function extraction_subtitles
 {
    echo "function extraction_subtitles"
@@ -35,6 +38,7 @@ function search_text
     echo "$search" > searchxyz~ 
     #@up sed ma na celu podmian podkreslen na spacje - bez tego wyszukiwanie bylo falszywe
     echo "$search"
+    search_url = "$search"
     google --rua "$search" | sed 's/_/ /' | sed 's/bonusy/titulky/' | sed 's/dalsi-casti/titulky/' > result_search.txt~
     awk -f command_search.awk result_search.txt~ > sprawdzone.txt~    
   }
@@ -106,6 +110,7 @@ search_text "${array_episode[$var_i]}"
 extraction_subtitles 
 movie_url=$(cat sprawdzone.txt~)  #NIGDY NIE PISZ movie_url = $(cat search_result.txt)
 echo "koncowka \"$movie_url\" końcówka"
+echo "search_url : $search_url"
 download_episode "$movie_url" "$episod"
 upload_episode_yt "$movie_url"
 
