@@ -20,6 +20,8 @@ elif [[ "$1" == "4" ]]
 #5
 elif [[ "$1" == "5" ]]
   then
+    google --rua "$match" | sed 's/_/ /' | sed 's/bonusy/titulky/' | sed 's/dalsi-casti/titulky/'
+    echo "a teraz awk"
     awk -f command_search.awk result_search.txt~
 else
   "nie podałeś numeru parametru"
