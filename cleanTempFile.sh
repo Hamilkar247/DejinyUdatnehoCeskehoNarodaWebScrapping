@@ -1,5 +1,6 @@
 #!/bin/bash
 
+rm .*~
 rm *~
 rm .*.un~
 rm .*.swp

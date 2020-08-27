@@ -1,8 +1,7 @@
-*.swp
-*~
 *.mp4
 *.sbv
 #gmailPass.txt, wyłączony z śledzenia  git update-index --skip-worktree <file>
 *.log
 .XComposeBackup
 venv
+~*
