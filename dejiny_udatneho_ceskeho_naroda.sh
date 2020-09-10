@@ -39,7 +39,7 @@ function search_text
     #@up sed ma na celu podmian podkreslen na spacje - bez tego wyszukiwanie bylo falszywe
     echo "$search"
     search_url="$search"
-    google --rua "$search" | sed 's/_/ /' | sed 's/bonusy/titulky/' | sed 's/dalsi-casti/titulky/' > result_search.txt~
+    google --rua "$search" | sed 's/_/ /' | sed 's/bonusy/titulky/' | sed 's/dalsi-casti/titulky/' | sed 's/diskuse/titulky/' > result_search.txt~
     awk -f command_search.awk result_search.txt~ > sprawdzone.txt~    
   }
 
