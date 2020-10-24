@@ -3,7 +3,6 @@ from time import sleep
 import os
 #https://www.youtube.com/watch?v=HkgDRRWrZKg
 class Google:
-    
     def __init__(self,username,password):
         self.driver=webdriver.Firefox()
         self.driver.get("https://stackoverflow.com/users/signup?ssrc=head&returnurl=%2fusers%2fstory%2fcurrent%27")

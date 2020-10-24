@@ -8,10 +8,12 @@ function extraction_subtitles
    echo "function extraction_subtitles"
    website=$(cat sprawdzone.txt~)
    echo "qwert $website"
-   curl $website | html2text | awk '/Dějiny udatného českého národa - /,/Související/' | head "-n-1" | tail "-n+2" > udatneho_ceskeho_naroda.txt
+   curl "$website" | html2text | awk '/Dějiny udatného českého národa - /,/Související/' | head "-n-1" | tail "-n+2" > udatneho_ceskeho_naroda.txt
    cat udatneho_ceskeho_naroda.txt
    echo 'wyekstrakowania napisów z strony'
-   
+
+   #ten cat jest tu raczje potrzebny bo bez niego nie działa z założeniem
+   #shellcheck disable=SC2002
    cat udatneho_ceskeho_naroda.txt | awk '{ gsub("*","",$1); print $0}' | sed 's/ */ /' | sed 's/ */ /'  | tr '\n' ' ' | sed 's/00:0/_00:0/g' | sed 's/_/\n/g' > ho_ceskeho_naroda.sbv
    #rm udatnetho_ceskeho_naroda.txt
    python skeho_naroda.py
@@ -19,7 +21,7 @@ function extraction_subtitles
    echo 'zakończono przetwarzanie napisów'
 }
 
-function trim 
+function trim
 {
     #parametr -i zmienia wejsciowe na dane na efekt regexa
     echo "function trim"
@@ -35,28 +37,27 @@ function search_text
     #$@ -dolar małpa - zwraca argumenty jako tablice
     #$* zwraca zkonkatenowne wszystkie argumenty
     search='side:"ceskatelevize.cz/ivysilani/"'" dejiny udatneho ceskeho naroda ""$*"
-    echo "$search" > searchxyz~ 
+    echo "$search" > searchxyz~
     #@up sed ma na celu podmian podkreslen na spacje - bez tego wyszukiwanie bylo falszywe
     echo "$search"
     search_url="$search"
     google --rua "$search" | sed 's/_/ /' | sed 's/bonusy/titulky/' | sed 's/dalsi-casti/titulky/' | sed 's/diskuse/titulky/' > result_search.txt~
-    awk -f command_search.awk result_search.txt~ > sprawdzone.txt~    
+    awk -f command_search.awk result_search.txt~ > sprawdzone.txt~
   }
 
 function download_episode
-{  
-   if [ -z "$1" ]
-   then
+{
+   if [[ -z "$1" ]]; then
      echo "download_episode : Nie podano https strony";
-     return; 
-   elif [ -z "$2" ]
+     return;
+   elif [[ -z "$2" ]]
    then
      echo "download_episode : Nie podano numeru elementu";
      return;
    fi
    youtube-dl "$1"
    # *.mp4 - rzuca warningiem SC2035, poniższy zapis jest bezpieczniejszy
-   rename "s/[0-9]+.mp4/ Odcinek $2 Napisy polsko-czeskie.mp4/" *.mp4
+   rename "s/[0-9]+.mp4/ Odcinek $2 Napisy polsko-czeskie.mp4/" "*.mp4"
 }
 
 function upload_episode_yt
@@ -67,8 +68,8 @@ function upload_episode_yt
        exit;
    fi
 #   src_venv #uruchamiam selenium
-   venv/bin/python exampleGmail.py 
-   nautilus . 
+   venv/bin/python exampleGmail.py
+   nautilus .
 }
 
 #==================START==================
@@ -92,7 +93,7 @@ cat lista_odcinkow.txt
 
 filename='lista_odcinkow.txt'
 n=1
-while read line; do
+while read -r line; do
 var="$line"
 array_episode+=("$var")    #ciapki są potrzebne bo inaczej mamy 3 razy wiecej elementow w tablicy
 n=$((n+1))
@@ -100,14 +101,14 @@ done < $filename
 
 echo "rozmiar tablicy ${#array_episode[@]} "
 #echo "${array_episode[@]}"
-episod=$1 #episod=34 gdy petla bedzie działać to za parametr bedzie 
+episod=$1 #episod=34 gdy petla bedzie działać to za parametr bedzie
 var_i=$episod-1
 search_text "${array_episode[$var_i]}"
 
 #for i in "${arrayName[@]}" wnetrze tego ostatecznie do wykonania w petli
 #do
 
-extraction_subtitles 
+extraction_subtitles
 movie_url=$(cat sprawdzone.txt~)  #NIGDY NIE PISZ movie_url = $(cat search_result.txt)
 echo "koncowka \"$movie_url\" końcówka"
 echo "search_url : $search_url"
