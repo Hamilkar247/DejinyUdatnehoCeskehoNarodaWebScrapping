@@ -57,7 +57,9 @@ function download_episode
    fi
    youtube-dl "$1"
    # *.mp4 - rzuca warningiem SC2035, poniższy zapis jest bezpieczniejszy
-   rename "s/[0-9]+.mp4/ Odcinek $2 Napisy polsko-czeskie.mp4/" "*.mp4"
+   #uwaga - nie można jak chcesz wykorzystać rename
+   #shellcheck disable=SC2016
+   rename "s/[0-9]+.mp4/ Odcinek $2 Napisy polsko-czeskie.mp4/" *.mp4
 }
 
 function upload_episode_yt
